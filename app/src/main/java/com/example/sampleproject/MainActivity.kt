@@ -3,9 +3,8 @@ package com.example.sampleproject
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.sampleproject.ui.theme.SampleProjectTheme
@@ -17,7 +16,7 @@ class MainActivity : ComponentActivity() {
             SampleProjectTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
-                    Greeting("Android")
+                    CreateSampleLayout()
                 }
             }
         }
@@ -25,14 +24,26 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    SampleProjectTheme {
-        Greeting("Android")
+@Preview
+fun CreateSampleLayout() {
+    Scaffold(
+        floatingActionButton = {
+            FloatingActionButton(onClick = { /* ... */ }) {
+                /* FAB content */
+            }
+        },
+        isFloatingActionButtonDocked = true,
+        bottomBar = {
+            BottomAppBar(
+                // Defaults to null, that is, No cutout
+                cutoutShape = MaterialTheme.shapes.small.copy(
+                    CornerSize(percent = 50)
+                )
+            ) {
+                /* Bottom app bar content */
+            }
+        }
+    ) {
+        // Screen content
     }
 }
