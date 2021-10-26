@@ -3,47 +3,53 @@ package com.example.sampleproject
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.sampleproject.ui.theme.SampleProjectTheme
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
+    @ExperimentalMaterialApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             SampleProjectTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
-                    CreateSampleLayout()
+                    CreateBottomSheetLayout()
                 }
             }
         }
     }
 }
 
+@ExperimentalMaterialApi
 @Composable
 @Preview
-fun CreateSampleLayout() {
-    Scaffold(
-        floatingActionButton = {
-            FloatingActionButton(onClick = { /* ... */ }) {
-                /* FAB content */
-            }
+fun CreateBottomSheetLayout() {
+    val scaffoldState = rememberBottomSheetScaffoldState()
+    val scope = rememberCoroutineScope()
+    BottomSheetScaffold(
+        scaffoldState = scaffoldState,
+        sheetContent = {
+            // Sheet content
         },
-        isFloatingActionButtonDocked = true,
-        bottomBar = {
-            BottomAppBar(
-                // Defaults to null, that is, No cutout
-                cutoutShape = MaterialTheme.shapes.small.copy(
-                    CornerSize(percent = 50)
-                )
-            ) {
-                /* Bottom app bar content */
-            }
+        floatingActionButton = {
+            ExtendedFloatingActionButton(
+                text = { Text("Expand or collapse sheet") },
+                onClick = {
+                    scope.launch {
+                        scaffoldState.bottomSheetState.apply {
+                            if (isCollapsed) expand() else collapse()
+                        }
+                    }
+                }
+            )
         }
     ) {
         // Screen content
     }
 }
+
