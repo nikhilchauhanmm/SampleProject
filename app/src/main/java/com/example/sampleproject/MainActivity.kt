@@ -6,8 +6,10 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.sampleproject.ui.theme.SampleProjectTheme
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,6 +25,32 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@Composable
+@Preview
+fun CreateNavDrawer(){
+    val scaffoldState = rememberScaffoldState()
+    val scope = rememberCoroutineScope()
+    Scaffold(
+        scaffoldState = scaffoldState,
+        drawerContent = {
+            // Drawer content
+        },
+        floatingActionButton = {
+            ExtendedFloatingActionButton(
+                text = { Text("Open or close drawer") },
+                onClick = {
+                    scope.launch {
+                        scaffoldState.drawerState.apply {
+                            if (isClosed) open() else close()
+                        }
+                    }
+                }
+            )
+        }
+    ) {
+        // Screen content
+    }
+}
 @Composable
 @Preview
 fun CreateSampleLayout() {
@@ -47,3 +75,4 @@ fun CreateSampleLayout() {
         // Screen content
     }
 }
+
